@@ -1,0 +1,207 @@
+[
+  {
+    "step": "assign new user",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users?filter=userName%20eq%20%22scim.lifecycle%40example.com%22&startIndex=1&count=100"
+      },
+      {
+        "method": "POST",
+        "path": "/scim/v2/Users",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "scim.lifecycle@example.com",
+          "name": {
+            "givenName": "Scim",
+            "familyName": "Lifecycle"
+          },
+          "emails": [
+            {
+              "primary": true,
+              "value": "scim.lifecycle@example.com",
+              "type": "work"
+            }
+          ],
+          "displayName": "Scim Lifecycle",
+          "locale": "en-US",
+          "externalId": "00u184t0yhmQwsXEh698",
+          "groups": [],
+          "password": "okta-generated-password",
+          "active": true
+        }
+      }
+    ]
+  },
+  {
+    "step": "edit last name",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5"
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+        "body": {
+          "active": true,
+          "displayName": "Scim Lifecycle2",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "scim.lifecycle@example.com"
+            }
+          ],
+          "externalId": "00u184t0yhmQwsXEh698",
+          "id": "da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T19:13:58.892385Z",
+            "lastModified": "2026-09-28T19:13:58.892385Z",
+            "location": "https://hatless-campfire-flock.ngrok-free.dev/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+            "resourceType": "User",
+            "version": "W/\"1790622838892385\""
+          },
+          "name": {
+            "familyName": "Lifecycle2",
+            "givenName": "Scim"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "scim.lifecycle@example.com",
+          "groups": []
+        }
+      }
+    ]
+  },
+  {
+    "step": "unassign",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5"
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+        "body": {
+          "active": false,
+          "displayName": "Scim Lifecycle2",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "scim.lifecycle@example.com"
+            }
+          ],
+          "externalId": "00u184t0yhmQwsXEh698",
+          "id": "da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T19:13:58.892385Z",
+            "lastModified": "2026-09-28T19:14:54.181071Z",
+            "location": "https://hatless-campfire-flock.ngrok-free.dev/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+            "resourceType": "User",
+            "version": "W/\"1790622894181071\""
+          },
+          "name": {
+            "familyName": "Lifecycle2",
+            "givenName": "Scim"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "scim.lifecycle@example.com"
+        }
+      }
+    ]
+  },
+  {
+    "step": "reassign (PUT sent twice)",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users?filter=userName%20eq%20%22scim.lifecycle%40example.com%22&startIndex=1&count=100"
+      },
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5"
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+        "body": {
+          "active": true,
+          "displayName": "Scim Lifecycle2",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "scim.lifecycle@example.com"
+            }
+          ],
+          "externalId": "00u184t0yhmQwsXEh698",
+          "id": "da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T19:13:58.892385Z",
+            "lastModified": "2026-09-28T19:15:39.083683Z",
+            "location": "https://hatless-campfire-flock.ngrok-free.dev/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+            "resourceType": "User",
+            "version": "W/\"1790622939083683\""
+          },
+          "name": {
+            "familyName": "Lifecycle2",
+            "givenName": "Scim"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "scim.lifecycle@example.com"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5"
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+        "body": {
+          "active": true,
+          "displayName": "Scim Lifecycle2",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "scim.lifecycle@example.com"
+            }
+          ],
+          "externalId": "00u184t0yhmQwsXEh698",
+          "id": "da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T19:13:58.892385Z",
+            "lastModified": "2026-09-28T19:16:02.349821Z",
+            "location": "https://hatless-campfire-flock.ngrok-free.dev/scim/v2/Users/da3f2ea4-03ec-49e4-ad50-f0806b15bda5",
+            "resourceType": "User",
+            "version": "W/\"1790622962349821\""
+          },
+          "name": {
+            "familyName": "Lifecycle2",
+            "givenName": "Scim"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "scim.lifecycle@example.com",
+          "groups": []
+        }
+      }
+    ]
+  }
+]

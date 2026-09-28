@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/fatih/structs"
 	"github.com/go-chi/chi/v5"
@@ -50,6 +51,17 @@ func (a *API) DeleteIdentity(w http.ResponseWriter, r *http.Request) error {
 	}
 	if identityToBeDeleted == nil {
 		return apierrors.NewUnprocessableEntityError(apierrors.ErrorCodeIdentityNotFound, "Identity doesn't exist")
+	}
+	if id, ok := strings.CutPrefix(identityToBeDeleted.Provider, "sso:"); ok && a.config.SSO.SCIM.Enabled {
+		if providerID, perr := uuid.FromString(id); perr == nil {
+			managed, terr := models.IsSCIMManaged(db, providerID, user.ID)
+			if terr != nil {
+				return apierrors.NewInternalServerError("Database error finding SCIM user").WithInternalError(terr)
+			}
+			if managed {
+				return apierrors.NewUnprocessableEntityError(apierrors.ErrorCodeUserSSOManaged, "Identity is managed by SCIM provisioning")
+			}
+		}
 	}
 
 	provider := identityToBeDeleted.Provider

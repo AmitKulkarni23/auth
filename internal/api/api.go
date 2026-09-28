@@ -138,7 +138,12 @@ func NewAPIWithVersion(globalConfig *conf.GlobalConfiguration, db *storage.Conne
 		api.oauthServer = oauthserver.NewServer(globalConfig, db, api.tokenService)
 	}
 
-	api.scim = scim.NewServer(globalConfig)
+	api.scim = scim.NewServer(globalConfig, scim.Options{
+		Validate: scim.NewTokenValidator(db),
+		Limit:    api.limitSCIMProvider(api.limiterOpts.SCIM),
+		Users:    scim.NewUserRepository(globalConfig, db, newSCIMUserProvisioner(api)),
+		Groups:   scim.NewGroupRepository(globalConfig, db, newSCIMGroupProvisioner(api)),
+	})
 
 	if api.config.Password.HIBP.Enabled {
 		httpClient := &http.Client{
@@ -404,6 +409,19 @@ func NewAPIWithVersion(globalConfig *conf.GlobalConfiguration, db *storage.Conne
 						r.Get("/", api.adminSSOProvidersGet)
 						r.Put("/", api.adminSSOProvidersUpdate)
 						r.Delete("/", api.adminSSOProvidersDelete)
+
+						r.Route("/scim", func(r *router) {
+							r.Use(api.requireScimServerEnabled)
+
+							r.Get("/", api.adminSCIMGet)
+							r.Delete("/", api.adminSCIMDelete)
+
+							r.Route("/tokens", func(r *router) {
+								r.Get("/", api.adminSCIMTokensList)
+								r.Post("/", api.adminSCIMTokensCreate)
+								r.Delete("/{prefix}", api.adminSCIMTokensRevoke)
+							})
+						})
 					})
 				})
 			})
@@ -463,11 +481,27 @@ func NewAPIWithVersion(globalConfig *conf.GlobalConfiguration, db *storage.Conne
 
 		r.Route(scim.BasePath, func(r *router) {
 			r.Use(api.requireScimServerEnabled)
+			r.Use(api.withSCIMRequest)
+			r.UseBypass(api.limitSCIMHandler(api.limiterOpts.SCIMIP))
 			r.NotFound(api.scim.NotFound)
 
-			r.Get("/ServiceProviderConfig", api.scim.ServiceProviderConfig)
-			r.Get("/ResourceTypes", api.scim.ResourceTypes)
-			r.Get("/Schemas", api.scim.Schemas)
+			r.Method(http.MethodGet, "/ServiceProviderConfig", api.scim)
+			r.Method(http.MethodGet, "/ResourceTypes", api.scim)
+			r.Method(http.MethodGet, "/ResourceTypes/{id}", api.scim)
+			r.Method(http.MethodGet, "/Schemas", api.scim)
+			r.Method(http.MethodGet, "/Schemas/{id}", api.scim)
+			r.Method(http.MethodGet, "/Users", api.scim)
+			r.Method(http.MethodPost, "/Users", api.scim)
+			r.Method(http.MethodGet, "/Users/{id}", api.scim)
+			r.Method(http.MethodPut, "/Users/{id}", api.scim)
+			r.Method(http.MethodPatch, "/Users/{id}", api.scim)
+			r.Method(http.MethodDelete, "/Users/{id}", api.scim)
+			r.Method(http.MethodGet, "/Groups", api.scim)
+			r.Method(http.MethodPost, "/Groups", api.scim)
+			r.Method(http.MethodGet, "/Groups/{id}", api.scim)
+			r.Method(http.MethodPut, "/Groups/{id}", api.scim)
+			r.Method(http.MethodPatch, "/Groups/{id}", api.scim)
+			r.Method(http.MethodDelete, "/Groups/{id}", api.scim)
 		})
 	})
 

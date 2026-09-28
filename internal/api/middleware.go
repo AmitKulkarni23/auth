@@ -17,6 +17,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/supabase/auth/internal/api/apierrors"
 	"github.com/supabase/auth/internal/api/oauthserver"
+	"github.com/supabase/auth/internal/api/scim"
 	"github.com/supabase/auth/internal/api/shared"
 	"github.com/supabase/auth/internal/models"
 	"github.com/supabase/auth/internal/observability"
@@ -427,10 +428,43 @@ func (a *API) requirePasskeyEnabled(w http.ResponseWriter, req *http.Request) (c
 
 func (a *API) requireScimServerEnabled(w http.ResponseWriter, req *http.Request) (context.Context, error) {
 	ctx := req.Context()
-	if !a.config.Experimental.ScimEnabled {
+	if !a.config.SSO.SCIM.Enabled {
 		return nil, apierrors.NewNotFoundError(apierrors.ErrorCodeFeatureDisabled, "SCIM server is disabled")
 	}
 	return ctx, nil
+}
+
+func (a *API) withSCIMRequest(w http.ResponseWriter, req *http.Request) (context.Context, error) {
+	return scimRequestKey.WithValue(req.Context(), req), nil
+}
+
+func (a *API) limitSCIMHandler(lmt *limiter.Limiter) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if err := a.performRateLimiting(lmt, r); err != nil {
+				handler(a.scim.TooManyRequests)(w, r)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func (a *API) limitSCIMProvider(lmt *limiter.Limiter) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			providerID, ok := scim.SSOProviderID(r.Context())
+			if !ok {
+				next.ServeHTTP(w, r)
+				return
+			}
+			if err := tollbooth.LimitByKeys(lmt, []string{providerID.String()}); err != nil {
+				handler(a.scim.TooManyRequests)(w, r)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 func (a *API) databaseCleanup(cleanup models.Cleaner) func(http.Handler) http.Handler {

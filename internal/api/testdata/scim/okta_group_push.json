@@ -1,0 +1,375 @@
+[
+  {
+    "step": "push group",
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/scim/v2/Groups",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "displayName": "scim-capture",
+          "members": []
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": []
+        }
+      }
+    ]
+  },
+  {
+    "step": "add alice (sent twice)",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": "alice.capture@example.com"
+            }
+          ]
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": "alice.capture@example.com"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "step": "retry: alice and bob",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": null
+            },
+            {
+              "value": "870e2e05-0e57-4f77-af74-3306be7aac3a",
+              "display": "bob.capture@example.com"
+            }
+          ]
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": "alice.capture@example.com"
+            },
+            {
+              "value": "870e2e05-0e57-4f77-af74-3306be7aac3a",
+              "display": "bob.capture@example.com"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "step": "remove alice",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": null
+            },
+            {
+              "value": "870e2e05-0e57-4f77-af74-3306be7aac3a",
+              "display": null
+            }
+          ]
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "870e2e05-0e57-4f77-af74-3306be7aac3a",
+              "display": null
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "step": "remove bob",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": [
+            {
+              "value": "870e2e05-0e57-4f77-af74-3306be7aac3a",
+              "display": null
+            }
+          ]
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture",
+          "members": []
+        }
+      }
+    ]
+  },
+  {
+    "step": "rename",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture-renamed",
+          "members": []
+        }
+      }
+    ]
+  },
+  {
+    "step": "re-add alice (sent twice)",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture-renamed",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": "alice.capture@example.com"
+            }
+          ]
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+        "body": {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:Group"
+          ],
+          "id": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+          "displayName": "scim-capture-renamed",
+          "members": [
+            {
+              "value": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+              "display": "alice.capture@example.com"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "step": "deactivate alice",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+        "body": {
+          "active": false,
+          "displayName": "Alice Capture",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "alice.capture@example.com"
+            }
+          ],
+          "externalId": "00u184ow24y3MJ1Do698",
+          "groups": [
+            {
+              "$ref": "http://localhost:9999/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+              "display": "scim-capture-renamed",
+              "type": "direct",
+              "value": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572"
+            }
+          ],
+          "id": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T17:52:36.295891Z",
+            "lastModified": "2026-09-28T17:52:36.295891Z",
+            "location": "http://localhost:9999/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+            "resourceType": "User",
+            "version": "W/\"1790617956295891\""
+          },
+          "name": {
+            "familyName": "Capture",
+            "givenName": "Alice"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "alice.capture@example.com"
+        }
+      }
+    ]
+  },
+  {
+    "step": "reactivate alice and reassign app",
+    "requests": [
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+        "body": {
+          "active": true,
+          "displayName": "Alice Capture",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "alice.capture@example.com"
+            }
+          ],
+          "externalId": "00u184ow24y3MJ1Do698",
+          "groups": [],
+          "id": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T17:52:36.295891Z",
+            "lastModified": "2026-09-28T18:15:25.689427Z",
+            "location": "http://localhost:9999/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+            "resourceType": "User",
+            "version": "W/\"1790619325689427\""
+          },
+          "name": {
+            "familyName": "Capture",
+            "givenName": "Alice"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "alice.capture@example.com"
+        }
+      },
+      {
+        "method": "PUT",
+        "path": "/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+        "body": {
+          "active": true,
+          "displayName": "Alice Capture",
+          "emails": [
+            {
+              "primary": true,
+              "type": "work",
+              "value": "alice.capture@example.com"
+            }
+          ],
+          "externalId": "00u184ow24y3MJ1Do698",
+          "groups": [
+            {
+              "$ref": "http://localhost:9999/scim/v2/Groups/abb1dcbc-7b00-41c7-8b9d-78e4b826e572",
+              "display": "scim-capture-renamed",
+              "type": "direct",
+              "value": "abb1dcbc-7b00-41c7-8b9d-78e4b826e572"
+            }
+          ],
+          "id": "24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+          "locale": "en-US",
+          "meta": {
+            "created": "2026-09-28T17:52:36.295891Z",
+            "lastModified": "2026-09-28T18:13:23.777587Z",
+            "location": "http://localhost:9999/scim/v2/Users/24fd0f10-d02e-45f6-8f33-53e2393f0a7c",
+            "resourceType": "User",
+            "version": "W/\"1790619203777587\""
+          },
+          "name": {
+            "familyName": "Capture",
+            "givenName": "Alice"
+          },
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "userName": "alice.capture@example.com"
+        }
+      }
+    ]
+  }
+]
